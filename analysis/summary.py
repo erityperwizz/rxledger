@@ -74,6 +74,16 @@ def build():
         "q3_any_flag": f"{q3['any_flag_rate']:.1%}",
         "q3_multi_flag": f"{q3['multi_flag_rate']:.2%}",
     }
+    genai = pub / "genai_validation.csv"
+    if genai.exists():
+        g = kv(genai)
+        rows.update({
+            "genai_accuracy": f"{float(g['accuracy']):.0%}",
+            "genai_accuracy_ci": f"{float(g['accuracy_ci_low']):.0%} to {float(g['accuracy_ci_high']):.0%}",
+            "genai_threshold": f"{float(g['acceptance_threshold']):.0%}",
+            "genai_lenient": f"{float(g['accuracy_including_noted_alternates']):.0%}",
+            "genai_cost_weighted": f"{float(g['cost_weighted_accuracy']):.0%}",
+        })
     return rows
 
 

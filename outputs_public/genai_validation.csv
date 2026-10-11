@@ -1,0 +1,11 @@
+metric,value
+model,qwen2.5:7b-instruct
+sample_size,100
+accuracy,0.66
+accuracy_ci_low,0.5627754565831095
+accuracy_ci_high,0.74538620502457
+cost_weighted_accuracy,0.8801068625459649
+accuracy_including_noted_alternates,0.71
+acceptance_threshold,0.85
+accepted,False
+valid_json_rate,1.0

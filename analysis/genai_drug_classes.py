@@ -217,8 +217,25 @@ def wilson(k, n, z=1.96):
     return centre - half, centre + half
 
 
+def read_labels():
+    """Read the hand label sheet as saved by Excel: UTF-8 or Windows encoding, and any
+    extra columns (for example a pasted class list) ignored."""
+    try:
+        labels = pd.read_csv(LABEL_SHEET, encoding="utf-8")
+    except UnicodeDecodeError:
+        labels = pd.read_csv(LABEL_SHEET, encoding="cp1252")
+    return labels[["sample_id", "generic_name", "example_brands", "hand_label", "notes"]]
+
+
+def noted_alternates(note):
+    """Classes the labeler named in the notes as acceptable alternatives."""
+    if not isinstance(note, str):
+        return set()
+    return {c for c in CLASS_NAMES if c.lower() in note.lower()}
+
+
 def evaluate():
-    labels = pd.read_csv(LABEL_SHEET)
+    labels = read_labels()
     labels["hand_label"] = labels["hand_label"].fillna("").str.strip()
     missing = labels["hand_label"].eq("").sum()
     bad = labels.loc[~labels["hand_label"].isin(CLASS_NAMES + [""]), "hand_label"].unique()
@@ -228,13 +245,19 @@ def evaluate():
     m = labels.merge(pred[["generic_name", "therapeutic_class", "confidence", "drug_cost"]],
                      on="generic_name", how="left")
     m["correct"] = m["hand_label"] == m["therapeutic_class"]
+    # secondary (fixed before evaluation, context only): also accept a class the labeler
+    # wrote in the notes as an alternative; acceptance uses the strict match only
+    m["correct_or_noted"] = m["correct"] | m.apply(
+        lambda r: r["therapeutic_class"] in noted_alternates(r["notes"]), axis=1)
+    lenient = m["correct_or_noted"].mean()
     n, k = len(m), int(m["correct"].sum())
     acc = k / n
     lo, hi = wilson(k, n)
     weighted = (m["correct"] * m["drug_cost"]).sum() / m["drug_cost"].sum()
     by_conf = m.groupby("confidence")["correct"].agg(["size", "mean"]).reset_index()
     accepted = bool(acc >= ACCEPT_ACCURACY)
-    errors = m.loc[~m["correct"], ["generic_name", "hand_label", "therapeutic_class", "confidence"]]
+    errors = m.loc[~m["correct"], ["generic_name", "hand_label", "therapeutic_class",
+                                   "confidence", "correct_or_noted"]]
     result = pd.DataFrame([
         ("model", pred["model"].iloc[0]),
         ("sample_size", n),
@@ -242,6 +265,7 @@ def evaluate():
         ("accuracy_ci_low", lo),
         ("accuracy_ci_high", hi),
         ("cost_weighted_accuracy", weighted),
+        ("accuracy_including_noted_alternates", lenient),
         ("acceptance_threshold", ACCEPT_ACCURACY),
         ("accepted", accepted),
         ("valid_json_rate", pred["valid_json"].mean()),
@@ -249,7 +273,7 @@ def evaluate():
     result.to_csv(config.PUBLIC_OUT / "genai_validation.csv", index=False)
     errors.to_csv(config.PUBLIC_OUT / "genai_validation_errors.csv", index=False)
     md = "\n".join([
-        "## Phase 8: GenAI drug classification (validated)",
+        "## Phase 8: GenAI drug classification (validation result)",
         "",
         f"A local model ({pred['model'].iloc[0]}, via Ollama) classified all "
         f"{len(pred):,} Part D generic names into {len(CLASS_NAMES)} therapeutic classes with "
@@ -258,11 +282,12 @@ def evaluate():
         "",
         f"On a random sample of {n} generic names labeled by hand without seeing the model "
         f"output, accuracy was **{acc:.0%}** (95% CI {lo:.0%} to {hi:.0%}); weighted by 2024 "
-        f"Part D cost it was {weighted:.0%}. The acceptance threshold, set before evaluation, "
-        f"was {ACCEPT_ACCURACY:.0%}: the classes were "
-        + ("**accepted** and are used as `therapeutic_class` in the drug dimension."
-           if accepted else "**not accepted** and are not used anywhere in the analysis.")
-        + "",
+        f"Part D cost it was {weighted:.0%}. Counting a class the labeler noted as an "
+        f"acceptable alternative for ambiguous drugs (a secondary measure fixed before "
+        f"evaluation), it was {lenient:.0%}. The acceptance threshold, set before evaluation "
+        f"and applied to strict accuracy only, was {ACCEPT_ACCURACY:.0%}: the classes were "
+        + ("**accepted** for use in the project."
+           if accepted else "**not accepted** and are not used anywhere in the analysis."),
         "",
         "| Model confidence | Drugs in sample | Accuracy |",
         "|---|---:|---:|",

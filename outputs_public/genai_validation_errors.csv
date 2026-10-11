@@ -1,0 +1,35 @@
+generic_name,hand_label,therapeutic_class,confidence,correct_or_noted
+Bromocriptine Mesylate,Diabetes,Endocrine and hormones,high,False
+Capmatinib Hydrochloride,Cancer,Other,high,False
+Cefadroxil,Anti-infective,Anticoagulant and antiplatelet,low,False
+Clorazepate Dipotassium,Mental health,Anti-infective,low,False
+Codeine Phosphate/Guaifenesin,Respiratory and allergy,Pain and anesthesia,high,False
+Dapsone,Anti-infective,Dermatologic,high,True
+Dichlorphenamide,Neurology,Kidney and urology,high,False
+Dimethyl Fumarate,Neurology,Immunology,high,False
+Doravirine,Anti-infective,Anticoagulant and antiplatelet,low,False
+Duloxetine Hcl,Mental health,Pain and anesthesia,high,True
+Exemestane,Cancer,Endocrine and hormones,high,False
+Finerenone,Kidney and urology,Other,low,False
+"Griseofulvin, Microsize",Anti-infective,Anticoagulant and antiplatelet,low,False
+Hydrocortisone Valerate,Dermatologic,Endocrine and hormones,high,False
+"Immune Globulin,gamma(Igg)slra",Immunology,Vaccine,high,False
+"Insulin Pmp Cart,aut,g6/7,cntr",Medical supplies,Diabetes,high,False
+Ivacaftor,Respiratory and allergy,Other,high,False
+Lumacaftor/Ivacaftor,Respiratory and allergy,Other,high,False
+Methenamine Hippurate,Anti-infective,Other,high,False
+Misoprostol,Gastrointestinal,Other,high,False
+Neomycin/Bacit/P-Myx/Hydrocort,Ophthalmic,Anticoagulant and antiplatelet,low,False
+Netarsudil Mesylate,Ophthalmic,Other,high,False
+Pitolisant Hcl,Neurology,Mental health,high,False
+Raltegravir Potassium,Anti-infective,Hematology,low,False
+Rifaximin,Gastrointestinal,Anti-infective,high,True
+Salicylic Acid,Dermatologic,Gastrointestinal,high,False
+Satralizumab-Mwge,Neurology,Other,high,False
+Sotagliflozin,Cardiovascular,Diabetes,high,True
+Sulfadiazine,Anti-infective,Anticoagulant and antiplatelet,low,False
+Taliglucerase Alfa,Other,Endocrine and hormones,low,False
+Tetracaine Hcl/Pf,Ophthalmic,Pain and anesthesia,high,False
+Viltolarsen,Neurology,Other,high,False
+Voclosporin,Immunology,Kidney and urology,high,True
+Zoledronic Ac/Mannitol/0.9nacl,Endocrine and hormones,Ophthalmic,low,False

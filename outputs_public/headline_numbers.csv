@@ -23,3 +23,8 @@ q2_dose_high,+21.1
 q3_prescribers,"743,380"
 q3_any_flag,3.3%
 q3_multi_flag,0.81%
+genai_accuracy,66%
+genai_accuracy_ci,56% to 75%
+genai_threshold,85%
+genai_lenient,71%
+genai_cost_weighted,88%

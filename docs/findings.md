@@ -204,3 +204,18 @@ By state (50 states and DC), the share of prescribers flagged on at least one me
 
 Outputs: `outputs_public/q3_*.csv` (specialty, state, and overall aggregates).
 <!-- q3:end -->
+
+<!-- genai:start -->
+## Phase 8: GenAI drug classification (validation result)
+
+A local model (qwen2.5:7b-instruct, via Ollama) classified all 1,823 Part D generic names into 22 therapeutic classes with a fixed prompt, JSON schema output, temperature 0, and a fixed seed. 100.0% of answers were valid on the first or second try.
+
+On a random sample of 100 generic names labeled by hand without seeing the model output, accuracy was **66%** (95% CI 56% to 75%); weighted by 2024 Part D cost it was 88%. Counting a class the labeler noted as an acceptable alternative for ambiguous drugs (a secondary measure fixed before evaluation), it was 71%. The acceptance threshold, set before evaluation and applied to strict accuracy only, was 85%: the classes were **not accepted** and are not used anywhere in the analysis.
+
+| Model confidence | Drugs in sample | Accuracy |
+|---|---:|---:|
+| high | 90 | 73% |
+| low | 10 | 0% |
+
+Misclassified examples are in `outputs_public/genai_validation_errors.csv`.
+<!-- genai:end -->

@@ -66,6 +66,19 @@ Results are published only as specialty and state rates.
 
 Full results, methods, and caveats: [docs/findings.md](docs/findings.md).
 
+### GenAI step: tested, not adopted
+
+A local LLM (Qwen2.5 7B through Ollama) classified all 1,823 Part D generic names into 22
+therapeutic classes using a fixed prompt, JSON schema output, temperature 0, and a fixed
+seed. On a random sample of 100 drugs labeled by hand without seeing the model's answers,
+strict accuracy was **66%** (95% CI 56% to 75%), below the **85%** threshold set before
+evaluation, so the classes are **not used** anywhere in the analysis. Accuracy was 71% when
+the labeler's noted alternatives for ambiguous drugs were accepted, and 88% when weighted
+by drug cost (well known, expensive drugs were easier). Every low confidence answer was
+wrong; the main failure was constrained decoding pushing antibiotics and HIV drugs into a
+class that shares their prefix ("Anti..."). Details:
+[docs/findings.md](docs/findings.md).
+
 ## Power BI report
 
 Four pages built on an aggregated star schema with DAX measures: executive overview,

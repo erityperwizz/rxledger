@@ -27,7 +27,8 @@ README_KEYS = [
     "savings_upper_bound", "savings_reviewed", "total_payments", "paid_prescriber_pct",
     "drug_match_rate", "q2_positive_drugs", "q2_lpm", "q2_lpm_ci", "q2_matched",
     "q2_matched_ci", "q2_dose_low", "q2_dose_high", "q3_prescribers", "q3_any_flag",
-    "q3_multi_flag",
+    "q3_multi_flag", "genai_accuracy", "genai_accuracy_ci", "genai_threshold",
+    "genai_lenient", "genai_cost_weighted",
 ]
 
 
