@@ -1,0 +1,10 @@
+metric,value,definition
+brands_with_generic_equivalent,928.0,Brand drugs whose generic name has Generic products in Part D
+brand_cost_with_generic_equivalent,25521663244.84,"2024 Part D cost of those brands, USD"
+savings_upper_bound,10706262083.972404,"Formula applied to every pair, USD"
+savings_excluded_after_review,3961166503.010437,"Pairs judged not interchangeable (different form, route, device, strength)"
+savings_reviewed_estimate,6745095580.961967,"Upper bound minus excluded pairs, USD (headline)"
+savings_reviewed_generic_fills_10k,6155419262.811115,"Reviewed estimate, only generic prices based on 10,000+ fills"
+brands_reviewed_by_hand,120.0,Top 120 brands by upper bound savings
+share_of_upper_bound_reviewed,0.964437508914142,Share of upper bound savings covered by the hand review
+brands_excluded,45.0,Brands excluded after review

@@ -1,0 +1,24 @@
+[project]
+name = "rxledger"
+version = "0.1.0"
+description = "Medicare Part D spending and manufacturer payments analytics (CMS 2024)"
+authors = [{ name = "Erica Mathias" }]
+requires-python = ">=3.11"
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["dbt", "data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff.lint.per-file-ignores]
+# these scripts emit Markdown tables; long literal lines are intended
+"ingest/data_dictionary.py" = ["E501"]
+"ingest/dq_report.py" = ["E501"]
+"ingest/to_parquet.py" = ["E501"]
+"analysis/*.py" = ["E501"]  # findings prose and SQL
+"docs/process_map.py" = ["E501"]  # diagram label text

@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: int_drugs
+    description: Part D drug catalog, one row per normalized brand name x normalized generic name.
+    columns:
+      - name: drug_key
+        tests: [unique, not_null]
+    tests:
+      - unique_combination_of_columns:
+          arguments:
+            columns: [brand_name_norm, generic_name_norm]
+
+  - name: int_op_product_drug_map
+    description: Open Payments drug and biological product names mapped to Part D drugs, with match method.
+    columns:
+      - name: product_name_norm
+        tests: [not_null]
+      - name: match_method
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['exact_brand', 'exact_generic', 'brand_prefix', 'product_prefix', 'unmatched']
+      - name: drug_key
+        tests:
+          - relationships:
+              arguments:
+                to: ref('int_drugs')
+                field: drug_key
+
+  - name: int_manufacturers
+    columns:
+      - name: manufacturer_id
+        tests: [unique, not_null]
+
+  - name: int_prescriber_partd
+    columns:
+      - name: npi
+        tests: [unique, not_null]
+
+  - name: int_prescriber_payments
+    columns:
+      - name: npi
+        tests: [unique, not_null]
+
+  - name: int_prescribers
+    columns:
+      - name: npi
+        tests: [unique, not_null]

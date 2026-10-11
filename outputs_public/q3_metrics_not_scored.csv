@@ -1,0 +1,66 @@
+specialty,metric
+Dentist,brand_share
+Emergency Medicine,brand_share
+General Surgery,brand_share
+Hand Surgery,brand_share
+Maxillofacial Surgery,brand_share
+Micrographic Dermatologic Surgery,brand_share
+Neurosurgery,brand_share
+Oral & Maxillofacial Surgery,brand_share
+Oral Surgery (Dentist only),brand_share
+Orthopaedic Surgery,brand_share
+Orthopedic Surgery,brand_share
+Otolaryngology,brand_share
+Pharmacist,brand_share
+Physical Medicine and Rehabilitation,brand_share
+Plastic Surgery,brand_share
+Plastic and Reconstructive Surgery,brand_share
+Podiatry,brand_share
+Radiation Oncology,brand_share
+Sports Medicine,brand_share
+Surgical Oncology,brand_share
+Thoracic Surgery,brand_share
+Addiction Medicine,opioid_share
+Advanced Heart Failure and Transplant Cardiology,opioid_share
+Allergy/ Immunology,opioid_share
+Cardiac Surgery,opioid_share
+Cardiology,opioid_share
+Certified Clinical Nurse Specialist,opioid_share
+Certified Nurse Midwife,opioid_share
+Clinical Cardiac Electrophysiology,opioid_share
+Critical Care (Intensivists),opioid_share
+Dentist,opioid_share
+Dermatology,opioid_share
+Diagnostic Radiology,opioid_share
+Endocrinology,opioid_share
+Family Medicine,opioid_share
+Gastroenterology,opioid_share
+General Practice,opioid_share
+Geriatric Psychiatry,opioid_share
+Hematology,opioid_share
+Hospitalist,opioid_share
+Infectious Disease,opioid_share
+Interventional Cardiology,opioid_share
+Interventional Radiology,opioid_share
+Micrographic Dermatologic Surgery,opioid_share
+Naturopath,opioid_share
+Nephrology,opioid_share
+Neurology,opioid_share
+Neuropsychiatry,opioid_share
+Nurse Practitioner,opioid_share
+Obstetrics & Gynecology,opioid_share
+Ophthalmology,opioid_share
+Optometry,opioid_share
+Pediatric Medicine,opioid_share
+Pharmacist,opioid_share
+Physician Assistant,opioid_share
+Podiatry,opioid_share
+Preventive Medicine,opioid_share
+Psychiatry,opioid_share
+Psychiatry & Neurology,opioid_share
+Pulmonary Disease,opioid_share
+Registered Nurse,opioid_share
+Sleep Medicine,opioid_share
+Specialist,opioid_share
+Student in an Organized Health Care Education/Training Program,opioid_share
+Undefined Physician type,opioid_share

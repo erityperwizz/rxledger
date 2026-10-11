@@ -1,0 +1,15 @@
+metric,value
+total_drug_cost,226740902130.59
+total_claims,1479628807.0
+total_fills_30day,2749028222.9018483
+prescribers,1139455.0
+drugs,3158.0
+generic_names,1823.0
+specialties,183.0
+prescriber_drug_rows,28023892.0
+generic_share_claims,0.8850914640241929
+generic_share_cost,0.12466354007050827
+generic_share_claims_strict,0.791266585552494
+generic_share_cost_strict,0.10401927923650989
+brand_cost_per_claim,1167.346590083294
+generic_cost_per_claim,21.583824210149753

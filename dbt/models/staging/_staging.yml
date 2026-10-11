@@ -1,0 +1,119 @@
+version: 2
+
+models:
+  - name: stg_partd__prescriber_drug
+    description: >
+      Medicare Part D Prescribers by Provider and Drug, 2024. One row per prescriber x drug.
+      Typed and trimmed; suppressed values are NULL, never zero.
+    columns:
+      - name: npi
+        description: Prescriber National Provider Identifier (Prscrbr_NPI).
+        tests: [not_null]
+      - name: specialty
+        description: Prescriber specialty (Prscrbr_Type), derived by CMS from Part B claims or NPPES taxonomy.
+        tests: [not_null]
+      - name: state_code
+        description: Prescriber state postal abbreviation (Prscrbr_State_Abrvtn); includes territories and XX, ZZ.
+        tests: [not_null]
+      - name: brand_name
+        tests: [not_null]
+      - name: generic_name
+        tests: [not_null]
+      - name: brand_name_norm
+        description: Brand name upper cased, punctuation collapsed to single spaces, trimmed.
+        tests: [not_null]
+      - name: generic_name_norm
+        tests: [not_null]
+      - name: brand_generic
+        description: Brand or Generic, from the name rule documented in docs/data_dictionary.md.
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Brand', 'Generic']
+      - name: claims
+        description: Tot_Clms. CMS excludes rows with fewer than 11 claims.
+        tests: [not_null]
+      - name: drug_cost
+        description: Tot_Drug_Cst, total paid by plan, beneficiary, subsidies, and third parties.
+        tests: [not_null]
+      - name: beneficiaries
+        description: Tot_Benes. NULL when CMS suppressed it (fewer than 11 beneficiaries).
+      - name: ge65_suppression_flag
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['*', '#']
+      - name: ge65_bene_suppression_flag
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['*', '#']
+
+  - name: stg_op__general_payments
+    description: Open Payments 2024 general payments, one row per record.
+    columns:
+      - name: record_id
+        tests: [unique, not_null]
+      - name: amount_usd
+        tests: [not_null]
+      - name: manufacturer_id
+        tests: [not_null]
+      - name: change_type
+        tests:
+          - accepted_values:
+              arguments:
+                values: ['NEW', 'CHANGED', 'UNCHANGED']
+      - name: nature_of_payment
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Royalty or License'
+                  - 'Compensation for services other than consulting, including serving as faculty or as a speaker at a venue other than a continuing education program'
+                  - 'Consulting Fee'
+                  - 'Food and Beverage'
+                  - 'Acquisitions'
+                  - 'Travel and Lodging'
+                  - 'Grant'
+                  - 'Education'
+                  - 'Honoraria'
+                  - 'Debt forgiveness'
+                  - 'Long term medical supply or device loan'
+                  - 'Space rental or facility fees (teaching hospital only)'
+                  - 'Compensation for serving as faculty or as a speaker for a medical education program'
+                  - 'Gift'
+                  - 'Charitable Contribution'
+                  - 'Entertainment'
+      - name: recipient_type
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Covered Recipient Physician'
+                  - 'Covered Recipient Non-Physician Practitioner'
+                  - 'Covered Recipient Teaching Hospital'
+
+  - name: stg_op__payment_products
+    description: General payment product slots 1 to 5 unpivoted to one row per payment x product.
+    columns:
+      - name: record_id
+        tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_op__general_payments')
+                field: record_id
+      - name: product_slot
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5]
+                quote: false
+
+  - name: stg_op__research_payments
+    description: Open Payments 2024 research payments (narrow), for manufacturer and therapeutic area context.
+    columns:
+      - name: record_id
+        tests: [unique, not_null]

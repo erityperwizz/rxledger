@@ -1,0 +1,11 @@
+rxledger:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('RXL_DUCKDB_PATH', '../data/rxledger.duckdb') }}"
+      threads: 1
+      # spills to ../data/rxledger.duckdb.tmp by default (DuckDB file database behavior)
+      settings:
+        memory_limit: "{{ env_var('RXL_DUCKDB_MEMORY', '9GB') }}"
+        preserve_insertion_order: false

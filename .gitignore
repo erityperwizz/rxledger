@@ -1,0 +1,32 @@
+# Environment
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Raw and derived data (never committed)
+data/
+*.parquet
+*.duckdb
+*.duckdb.wal
+*.zip
+*.csv
+!outputs_public/*.csv
+!dbt/seeds/*.csv
+!analysis/genai/*.csv
+
+# Individual-level results stay local
+outputs_private/
+
+# Project brief is private
+*BRIEF*.md
+
+# dbt build artifacts
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+logs/
+
+# Power BI temp files
+powerbi/~$*

@@ -1,0 +1,272 @@
+version: 2
+
+models:
+  - name: fact_prescriptions
+    description: Grain prescriber x drug, Medicare Part D 2024. One row per Part D source row.
+    columns:
+      - name: prescriber_key
+        description: Foreign key to dim_prescriber.
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_prescriber'), field: prescriber_key}
+      - name: drug_key
+        description: Foreign key to dim_drug.
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_drug'), field: drug_key}
+      - name: state_key
+        description: Foreign key to dim_state (prescriber state per NPPES).
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_state'), field: state_key}
+      - name: specialty_key
+        description: Foreign key to dim_specialty (Part D prescriber type).
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_specialty'), field: specialty_key}
+      - name: claims
+        description: Number of Part D claims including refills (Tot_Clms). Always 11 or more.
+        tests: [not_null]
+      - name: fills_30day
+        description: Standardized 30 day fills (Tot_30day_Fills); each claim bottom coded at 1 and top coded at 12 by CMS.
+      - name: day_supply
+        description: Total days supplied (Tot_Day_Suply).
+      - name: drug_cost
+        description: Total drug cost paid in USD (Tot_Drug_Cst), all payers, including dispensing fees and taxes.
+        tests: [not_null]
+      - name: beneficiaries
+        description: Unique beneficiaries for this prescriber and drug (Tot_Benes). NULL when suppressed (fewer than 11). Not additive across drugs.
+      - name: beneficiaries_suppressed
+        description: True when Tot_Benes was suppressed by CMS.
+    tests:
+      - unique_combination_of_columns:
+          arguments:
+            columns: [prescriber_key, drug_key]
+
+  - name: fact_payments
+    description: >
+      Grain general payment record x product slot. amount_usd is the payment split evenly
+      across the products it names, so sums reproduce published totals.
+    columns:
+      - name: record_id
+        description: Open Payments Record_ID.
+        tests: [not_null]
+      - name: product_slot
+        description: Product slot 1 to 5; 0 when the payment names no product.
+      - name: prescriber_key
+        description: Foreign key to dim_prescriber. NULL for teaching hospital recipients (no NPI).
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_prescriber'), field: prescriber_key}
+      - name: manufacturer_key
+        description: Foreign key to dim_manufacturer (the paying manufacturer or GPO).
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_manufacturer'), field: manufacturer_key}
+      - name: drug_key
+        description: Foreign key to dim_drug. Set only for Drug or Biological products that map to a Part D drug (primary match).
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_drug'), field: drug_key}
+      - name: date_key
+        description: Payment date as yyyymmdd, foreign key to dim_date. NULL for the 75 records with an invalid source date.
+        tests:
+          - relationships:
+              arguments: {to: ref('dim_date'), field: date_key}
+      - name: amount_usd
+        description: Allocated payment amount in USD (payment amount divided by products named).
+        tests: [not_null]
+      - name: payment_amount_usd
+        description: Full amount of the payment record, repeated on each product line. Do not sum.
+      - name: products_named
+        description: Number of product slots the payment names (0 to 5).
+      - name: nature_of_payment
+        description: Nature_of_Payment_or_Transfer_of_Value (16 CMS categories).
+        tests: [not_null]
+      - name: form_of_payment
+        description: Form_of_Payment_or_Transfer_of_Value.
+        tests:
+          - accepted_values:
+              arguments:
+                values:
+                  - 'Cash or cash equivalent'
+                  - 'In-kind items and services'
+                  - 'Stock'
+                  - 'Stock option'
+                  - 'Stock, stock option, or any other ownership interest'
+                  - 'Dividend, profit or other return on investment'
+      - name: recipient_type
+        description: Covered_Recipient_Type (physician, non physician practitioner, teaching hospital).
+      - name: is_teaching_hospital
+        description: True for teaching hospital recipients.
+      - name: product_type
+        description: Drug, Biological, Device, or Medical Supply, as reported.
+      - name: product_name
+        description: Product name as reported by the manufacturer.
+      - name: product_category
+        description: Product category or therapeutic area as reported.
+      - name: number_of_payments
+        description: Number of payments included in the record total.
+      - name: payment_date_invalid
+        description: True when the source date was missing or outside 2024.
+    tests:
+      - unique_combination_of_columns:
+          arguments:
+            columns: [record_id, product_slot]
+
+  - name: dim_prescriber
+    description: INTERNAL ONLY. Contains names and NPIs; never exported publicly. One row per NPI in Part D or Open Payments.
+    columns:
+      - name: prescriber_key
+        description: Surrogate key.
+        tests: [unique, not_null]
+      - name: npi
+        description: National Provider Identifier.
+        tests: [unique, not_null]
+      - name: last_org_name
+        description: Last name or organization name (Part D first, else Open Payments).
+      - name: first_name
+        description: First name.
+      - name: city
+        description: City from Part D (NULL for NPIs only in Open Payments).
+      - name: state_key
+        description: Foreign key to dim_state.
+      - name: specialty_key
+        description: Foreign key to dim_specialty; 'Not in Part D' for NPIs only in Open Payments.
+        tests:
+          - not_null
+          - relationships:
+              arguments: {to: ref('dim_specialty'), field: specialty_key}
+      - name: op_specialty
+        description: Most frequent Open Payments specialty (different taxonomy from Part D).
+      - name: in_partd
+        description: True when the NPI appears in Part D 2024.
+      - name: received_general_payment
+        description: True when the NPI received at least one 2024 general payment.
+      - name: total_claims
+        description: Sum of Part D claims across drugs.
+      - name: total_fills_30day
+        description: Sum of standardized 30 day fills across drugs.
+      - name: total_drug_cost
+        description: Sum of Part D drug cost across drugs.
+      - name: brand_claims
+        description: Part D claims for drugs classified Brand.
+      - name: drugs_prescribed
+        description: Number of distinct drugs with 11 or more claims.
+      - name: drug_beneficiary_sum
+        description: Sum of non suppressed drug level beneficiary counts. A volume proxy only, it double counts patients on several drugs.
+      - name: general_payment_records
+        description: Number of 2024 general payment records received.
+      - name: general_payment_usd
+        description: Total 2024 general payments received, USD.
+      - name: paying_manufacturers
+        description: Distinct manufacturers that made a general payment to this NPI.
+
+  - name: dim_drug
+    description: One row per Part D drug (brand name x generic name).
+    columns:
+      - name: drug_key
+        description: Surrogate key.
+        tests: [unique, not_null]
+      - name: brand_name
+        description: Brand name (Brnd_Name), most common spelling.
+      - name: generic_name
+        description: Generic name (Gnrc_Name), most common spelling.
+      - name: brand_name_norm
+        description: Normalized brand name used for matching.
+      - name: generic_name_norm
+        description: Normalized generic name used for matching.
+      - name: brand_generic
+        description: Brand or Generic (rule in docs/data_dictionary.md).
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Brand', 'Generic']
+      - name: is_generic_strict_rule
+        description: True when the brand name exactly equals the generic name after normalization (strict rule, kept for comparison).
+      - name: generic_available
+        description: True when any Part D row with the same generic name is classified Generic.
+      - name: brand_with_generic_equivalent
+        description: True for Brand drugs whose generic name also has a Generic product in Part D (substitution candidates).
+      - name: therapeutic_area
+        description: Most common Open Payments product category for payments naming this drug; NULL when none.
+      - name: is_opioid
+        description: True when the generic name contains an included opioid ingredient (seed opioid_ingredients, whole word match). Buprenorphine products are excluded.
+        tests: [not_null]
+
+  - name: dim_specialty
+    description: Part D prescriber specialty (Prscrbr_Type) plus 'Not in Part D'.
+    columns:
+      - name: specialty_key
+        description: Surrogate key.
+        tests: [unique, not_null]
+      - name: specialty
+        description: Specialty name.
+        tests: [unique, not_null]
+      - name: prescribers
+        description: Number of prescribers (NPIs) with this specialty.
+
+  - name: dim_state
+    description: States, DC, territories, and CMS special codes seen in either dataset.
+    columns:
+      - name: state_key
+        description: Surrogate key.
+        tests: [unique, not_null]
+      - name: state_code
+        description: Two letter postal code (XX unknown, ZZ foreign, AA AE AP armed forces).
+        tests: [unique, not_null]
+      - name: state_name
+        description: State or area name.
+      - name: census_region
+        description: Census region; 'Territory or other' outside the 50 states and DC.
+      - name: is_us_state_or_dc
+        description: True for the 50 states and DC.
+
+  - name: dim_manufacturer
+    description: Applicable manufacturers and GPOs that made 2024 general payments.
+    columns:
+      - name: manufacturer_key
+        description: Surrogate key.
+        tests: [unique, not_null]
+      - name: manufacturer_id
+        description: Open Payments Applicable_Manufacturer_or_Applicable_GPO_Making_Payment_ID.
+        tests: [unique, not_null]
+      - name: manufacturer_name
+        description: Most common reported name for the ID.
+      - name: manufacturer_state
+        description: Manufacturer state.
+      - name: manufacturer_country
+        description: Manufacturer country.
+      - name: name_variants
+        description: Number of name spellings reported under this ID in 2024.
+
+  - name: dim_date
+    description: 2024 calendar.
+    columns:
+      - name: date_key
+        description: yyyymmdd integer key.
+        tests: [unique, not_null]
+      - name: date
+        description: Calendar date (mark as date table in Power BI).
+      - name: year
+        description: Year.
+      - name: quarter
+        description: Quarter 1 to 4.
+      - name: month
+        description: Month number.
+      - name: month_name
+        description: Month name.
+      - name: month_label
+        description: Short month and year, for example Jan 2024.
+      - name: day_of_week
+        description: 0 Sunday to 6 Saturday.
+      - name: day_name
+        description: Day name.
+      - name: is_weekend
+        description: True on Saturday and Sunday.

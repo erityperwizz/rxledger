@@ -1,0 +1,25 @@
+key,formatted
+partd_rows,"28,023,892"
+op_general_rows,"15,498,687"
+total_drug_cost,$226.7 billion
+total_claims,1.48 billion
+prescribers,"1,139,455"
+generic_share_claims,88.5%
+generic_share_cost,12.5%
+top10_share_of_cost,33.5%
+savings_upper_bound,$10.71 billion
+savings_reviewed,$6.75 billion
+total_payments,$3.42 billion
+paid_prescriber_pct,56.4%
+drug_match_rate,93.5%
+q2_drugs,30
+q2_positive_drugs,29 of 30
+q2_lpm,11.4 percentage points
+q2_lpm_ci,+8.8 to +14.0
+q2_matched,10.1 percentage points
+q2_matched_ci,+7.7 to +12.5
+q2_dose_low,+8.9
+q2_dose_high,+21.1
+q3_prescribers,"743,380"
+q3_any_flag,3.3%
+q3_multi_flag,0.81%

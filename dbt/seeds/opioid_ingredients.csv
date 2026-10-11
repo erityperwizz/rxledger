@@ -1,0 +1,19 @@
+ingredient,included,note
+HYDROCODONE,true,
+BENZHYDROCODONE,true,
+OXYCODONE,true,
+MORPHINE,true,whole word match so APOMORPHINE (Parkinson's drug) is excluded
+HYDROMORPHONE,true,
+OXYMORPHONE,true,
+FENTANYL,true,
+METHADONE,true,Part D methadone is dispensed for pain; opioid treatment programs bill outside Part D
+TRAMADOL,true,
+TAPENTADOL,true,
+CODEINE,true,includes codeine combination and cough products
+MEPERIDINE,true,
+LEVORPHANOL,true,
+PENTAZOCINE,true,
+BUTORPHANOL,true,
+NALBUPHINE,true,
+OPIUM,true,whole word match so IPRATROPIUM and TIOTROPIUM are excluded
+BUPRENORPHINE,false,excluded: mostly prescribed to treat opioid use disorder; flagging it would penalize addiction treatment

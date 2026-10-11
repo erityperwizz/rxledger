@@ -1,0 +1,62 @@
+state_code,state_name,census_region,is_us_state_or_dc
+AL,Alabama,South,true
+AK,Alaska,West,true
+AZ,Arizona,West,true
+AR,Arkansas,South,true
+CA,California,West,true
+CO,Colorado,West,true
+CT,Connecticut,Northeast,true
+DE,Delaware,South,true
+DC,District of Columbia,South,true
+FL,Florida,South,true
+GA,Georgia,South,true
+HI,Hawaii,West,true
+ID,Idaho,West,true
+IL,Illinois,Midwest,true
+IN,Indiana,Midwest,true
+IA,Iowa,Midwest,true
+KS,Kansas,Midwest,true
+KY,Kentucky,South,true
+LA,Louisiana,South,true
+ME,Maine,Northeast,true
+MD,Maryland,South,true
+MA,Massachusetts,Northeast,true
+MI,Michigan,Midwest,true
+MN,Minnesota,Midwest,true
+MS,Mississippi,South,true
+MO,Missouri,Midwest,true
+MT,Montana,West,true
+NE,Nebraska,Midwest,true
+NV,Nevada,West,true
+NH,New Hampshire,Northeast,true
+NJ,New Jersey,Northeast,true
+NM,New Mexico,West,true
+NY,New York,Northeast,true
+NC,North Carolina,South,true
+ND,North Dakota,Midwest,true
+OH,Ohio,Midwest,true
+OK,Oklahoma,South,true
+OR,Oregon,West,true
+PA,Pennsylvania,Northeast,true
+RI,Rhode Island,Northeast,true
+SC,South Carolina,South,true
+SD,South Dakota,Midwest,true
+TN,Tennessee,South,true
+TX,Texas,South,true
+UT,Utah,West,true
+VT,Vermont,Northeast,true
+VA,Virginia,South,true
+WA,Washington,West,true
+WV,West Virginia,South,true
+WI,Wisconsin,Midwest,true
+WY,Wyoming,West,true
+PR,Puerto Rico,Territory or other,false
+VI,Virgin Islands,Territory or other,false
+GU,Guam,Territory or other,false
+MP,Northern Mariana Islands,Territory or other,false
+AS,American Samoa,Territory or other,false
+AA,Armed Forces Americas,Territory or other,false
+AE,Armed Forces Europe,Territory or other,false
+AP,Armed Forces Pacific,Territory or other,false
+XX,Unknown,Territory or other,false
+ZZ,Foreign Country,Territory or other,false

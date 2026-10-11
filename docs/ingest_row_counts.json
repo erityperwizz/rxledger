@@ -1,0 +1,62 @@
+[
+  {
+    "source": "partd_prescriber_drug",
+    "csv_file": "MUP_DPR_RY26_P04_V10_DY24_NPIBN.csv",
+    "csv_bytes": 4057615134,
+    "columns": 22,
+    "csv_rows_duckdb": 28023892,
+    "parquet_rows": 28023892,
+    "csv_rows_python": 28023892,
+    "match": true
+  },
+  {
+    "source": "op_general",
+    "csv_file": "OP_DTL_GNRL_PGYR2024_P06302026_06032026.csv",
+    "csv_bytes": 8970316799,
+    "columns": 91,
+    "csv_rows_duckdb": 15498687,
+    "parquet_rows": 15498687,
+    "csv_rows_python": 15498687,
+    "match": true
+  },
+  {
+    "source": "op_research",
+    "csv_file": "OP_DTL_RSRCH_PGYR2024_P06302026_06032026.csv",
+    "csv_bytes": 787357633,
+    "columns": 252,
+    "csv_rows_duckdb": 817215,
+    "parquet_rows": 817215,
+    "csv_rows_python": 817215,
+    "match": true
+  },
+  {
+    "source": "op_ownership",
+    "csv_file": "OP_DTL_OWNRSHP_PGYR2024_P06302026_06032026.csv",
+    "csv_bytes": 2216395,
+    "columns": 30,
+    "csv_rows_duckdb": 4834,
+    "parquet_rows": 4834,
+    "csv_rows_python": 4834,
+    "match": true
+  },
+  {
+    "source": "op_removed_deleted",
+    "csv_file": "OP_REMOVED_DELETED_PGYR2024_P06302026_06032026.csv",
+    "csv_bytes": 6568486,
+    "columns": 4,
+    "csv_rows_duckdb": 160183,
+    "parquet_rows": 160183,
+    "csv_rows_python": 160183,
+    "match": true
+  },
+  {
+    "source": "op_recipient_profile",
+    "csv_file": "OP_CVRD_RCPNT_PRFL_SPLMTL_P06302026_04032026.csv",
+    "csv_bytes": 404895846,
+    "columns": 32,
+    "csv_rows_duckdb": 1697232,
+    "parquet_rows": 1697232,
+    "csv_rows_python": 1697232,
+    "match": true
+  }
+]
