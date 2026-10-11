@@ -5,9 +5,9 @@ any_flag_rate,0.03262127041351664
 multi_flag_rate,0.008072587371196427
 any_flagged,24250.0
 multi_flagged,6001.0
-if_flagged,7461.0
-if_also_robust_flagged_share,0.6304784881383193
-robust_multi_also_if_share,0.4055990668221963
+if_flagged,7462.0
+if_also_robust_flagged_share,0.6176628249798981
+robust_multi_also_if_share,0.40693217797033826
 cost_per_claim_scored_prescribers,743379.0
 cost_per_claim_flagged,10400.0
 cost_per_claim_flag_rate_among_scored,0.013990171904237273

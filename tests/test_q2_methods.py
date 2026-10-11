@@ -64,3 +64,13 @@ def test_no_effect_gives_ci_around_zero():
     d = synthetic(effect=0.0, seed=7)
     b, se, _ = fit_family(d)["lpm"]
     assert abs(b) < 3 * se + 0.01
+
+
+def test_payment_totals_are_rounded_to_cents():
+    """Payment sums feed treatment flags and dose bins; unrounded float sums made a total
+    on a bin edge land on either side from run to run. Every payment sum must be rounded."""
+    import re
+
+    from analysis.payments_vs_prescribing import BUILD_SQL
+    sums = re.findall(r"(round\()?sum\((?:\w+\.)?(?:amount_usd|usd)\)", BUILD_SQL)
+    assert sums and all(prefix == "round(" for prefix in sums)

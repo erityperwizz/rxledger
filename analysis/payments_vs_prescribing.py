@@ -119,17 +119,21 @@ from marts.fact_prescriptions f join fam_drug fd using (drug_key)
 where fd.family in (select family from families)
 group by all;
 
+-- Payment totals are rounded to cents at every aggregation. fact_payments.amount_usd is
+-- a per product share (a double with fractions of a cent), and parallel summation can
+-- add it in a different order on each run; without rounding, a total sitting on a dose
+-- bin edge (for example exactly $100) could fall on either side from run to run.
 create or replace temp table pay_mfr as
-select prescriber_key, manufacturer_key, sum(amount_usd) as usd
+select prescriber_key, manufacturer_key, round(sum(amount_usd), 2) as usd
 from marts.fact_payments
 where prescriber_key is not null
 group by all;
 
 create or replace temp table pay_total as
-select prescriber_key, sum(usd) as usd from pay_mfr group by 1;
+select prescriber_key, round(sum(usd), 2) as usd from pay_mfr group by 1;
 
 create or replace temp table pay_product as
-select fd.family, p.prescriber_key, sum(p.amount_usd) as usd
+select fd.family, p.prescriber_key, round(sum(p.amount_usd), 2) as usd
 from marts.fact_payments p join fam_drug fd using (drug_key)
 where p.prescriber_key is not null and fd.family in (select family from families)
 group by all;
@@ -142,7 +146,7 @@ with elig as (
     join marts.dim_prescriber dp on dp.specialty_key = fs.specialty_key and dp.in_partd
 ),
 assoc_pay as (
-    select fm.family, pm.prescriber_key, sum(pm.usd) as usd
+    select fm.family, pm.prescriber_key, round(sum(pm.usd), 2) as usd
     from fam_mfr fm join pay_mfr pm using (manufacturer_key)
     group by all
 )
@@ -167,7 +171,10 @@ def load(con):
     mfrs = con.execute("""
         select family, string_agg(manufacturer_name, '; ' order by line_share desc) as manufacturers
         from fam_mfr group by 1""").df()
-    df = con.execute("select * from analysis").df()
+    # Fixed row order: DuckDB returns rows in arbitrary order (preserve_insertion_order is
+    # off), and the matched comparison depends on order through tie breaking in volume
+    # deciles and through which row receives which bootstrap weight.
+    df = con.execute("select * from analysis order by family, prescriber_key").df()
     for c in ["specialty_key", "state_key"]:
         df[c] = df[c].astype("int32")
     df["any_rx"] = (df["family_claims"] > 0).astype(float)

@@ -125,8 +125,8 @@ The gap rises with every step in payment size, from +8.9 pp for $1 to $100 to +2
 
 | Payments from the drug's manufacturer(s) in 2024 | Prescriber x drug pairs | Difference vs unpaid | 95% CI |
 |---|---:|---:|---:|
-| $1 to $100 | 827,770 | +8.9 pp | +6.7 to +11.2 |
-| $100 to $500 | 390,808 | +14.8 pp | +11.0 to +18.6 |
+| $1 to $100 | 827,774 | +8.9 pp | +6.7 to +11.2 |
+| $100 to $500 | 390,804 | +14.8 pp | +11.0 to +18.6 |
 | $500 to $5,000 | 25,429 | +19.6 pp | +14.3 to +25.0 |
 | over $5,000 | 8,708 | +21.1 pp | +15.1 to +27.2 |
 
@@ -171,7 +171,7 @@ Outputs: `outputs_public/q2_*.csv` (drug level and pooled results only).
 | Cost per beneficiary (proxy) | 712,487 | 8,010 | 1.1% | 0 |
 | Opioid share of claims | 267,207 | 1,551 | 0.6% | 44 |
 
-The Isolation Forest flagged 7,461 prescribers; 63% of them are also flagged by the robust z rule, and 41% of the prescribers flagged on two or more metrics are also isolated by the forest. Agreement between a univariate and a multivariate method makes the multi metric flags the most robust group.
+The Isolation Forest flagged 7,462 prescribers; 62% of them are also flagged by the robust z rule, and 41% of the prescribers flagged on two or more metrics are also isolated by the forest. Agreement between a univariate and a multivariate method makes the multi metric flags the most robust group.
 
 Ten largest specialties:
 

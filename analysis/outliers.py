@@ -90,6 +90,7 @@ join marts.dim_prescriber p using (prescriber_key)
 join marts.dim_specialty sp using (specialty_key)
 left join marts.dim_state st using (state_key)
 where m.total_claims >= {MIN_CLAIMS}
+order by m.prescriber_key  -- fixed order: Isolation Forest subsamples rows by position
 """
 
 
