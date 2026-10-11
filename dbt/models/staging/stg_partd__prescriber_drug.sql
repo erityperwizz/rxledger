@@ -27,7 +27,7 @@ typed as (
         {{ normalize_name('Brnd_Name') }}               as brand_name_norm,
         {{ normalize_name('Gnrc_Name') }}               as generic_name_norm,
         cast(Tot_Clms as integer)                       as claims,
-        cast(Tot_30day_Fills as double)                 as fills_30day,
+        cast(Tot_30day_Fills as decimal(18, 1))         as fills_30day,  -- source has at most 1 decimal; exact sums
         cast(Tot_Day_Suply as bigint)                   as day_supply,
         cast(Tot_Drug_Cst as decimal(18, 2))            as drug_cost,
         cast(nullif(trim(Tot_Benes), '') as integer)    as beneficiaries,
@@ -65,7 +65,7 @@ select
     ge65_suppression_flag,
     ge65_bene_suppression_flag,
     case when ge65_suppression_flag is null then cast(GE65_Tot_Clms as integer) end          as ge65_claims,
-    case when ge65_suppression_flag is null then cast(GE65_Tot_30day_Fills as double) end    as ge65_fills_30day,
+    case when ge65_suppression_flag is null then cast(GE65_Tot_30day_Fills as decimal(18, 1)) end as ge65_fills_30day,
     case when ge65_suppression_flag is null then cast(GE65_Tot_Drug_Cst as decimal(18, 2)) end as ge65_drug_cost,
     case when ge65_suppression_flag is null then cast(GE65_Tot_Day_Suply as bigint) end      as ge65_day_supply,
     case when ge65_bene_suppression_flag is null

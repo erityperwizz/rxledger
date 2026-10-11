@@ -1,7 +1,7 @@
 metric,value
 total_drug_cost,226740902130.59
 total_claims,1479628807.0
-total_fills_30day,2749028222.9018483
+total_fills_30day,2749028222.9
 prescribers,1139455.0
 drugs,3158.0
 generic_names,1823.0

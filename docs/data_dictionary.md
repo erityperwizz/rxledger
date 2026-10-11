@@ -103,7 +103,7 @@ Grain prescriber x drug, Medicare Part D 2024. One row per Part D source row.
 | state_key | BIGINT | Foreign key to dim_state (prescriber state per NPPES). |
 | specialty_key | BIGINT | Foreign key to dim_specialty (Part D prescriber type). |
 | claims | INTEGER | Number of Part D claims including refills (Tot_Clms). Always 11 or more. |
-| fills_30day | DOUBLE | Standardized 30 day fills (Tot_30day_Fills); each claim bottom coded at 1 and top coded at 12 by CMS. |
+| fills_30day | DECIMAL(18,1) | Standardized 30 day fills (Tot_30day_Fills); each claim bottom coded at 1 and top coded at 12 by CMS. |
 | day_supply | BIGINT | Total days supplied (Tot_Day_Suply). |
 | drug_cost | DECIMAL(18,2) | Total drug cost paid in USD (Tot_Drug_Cst), all payers, including dispensing fees and taxes. |
 | beneficiaries | INTEGER | Unique beneficiaries for this prescriber and drug (Tot_Benes). NULL when suppressed (fewer than 11). Not additive across drugs. |
@@ -153,7 +153,7 @@ INTERNAL ONLY. Contains names and NPIs; never exported publicly. One row per NPI
 | in_partd | BOOLEAN | True when the NPI appears in Part D 2024. |
 | received_general_payment | BOOLEAN | True when the NPI received at least one 2024 general payment. |
 | total_claims | HUGEINT | Sum of Part D claims across drugs. |
-| total_fills_30day | DOUBLE | Sum of standardized 30 day fills across drugs. |
+| total_fills_30day | DECIMAL(38,1) | Sum of standardized 30 day fills across drugs. |
 | total_drug_cost | DECIMAL(38,2) | Sum of Part D drug cost across drugs. |
 | brand_claims | HUGEINT | Part D claims for drugs classified Brand. |
 | drugs_prescribed | BIGINT | Number of distinct drugs with 11 or more claims. |
@@ -262,7 +262,7 @@ Medicare Part D Prescribers by Provider and Drug, 2024. One row per prescriber x
 | brand_generic | VARCHAR | Brand or Generic, from the name rule documented in docs/data_dictionary.md. |
 | is_generic_strict_rule | BOOLEAN |  |
 | claims | INTEGER | Tot_Clms. CMS excludes rows with fewer than 11 claims. |
-| fills_30day | DOUBLE |  |
+| fills_30day | DECIMAL(18,1) |  |
 | day_supply | BIGINT |  |
 | drug_cost | DECIMAL(18,2) | Tot_Drug_Cst, total paid by plan, beneficiary, subsidies, and third parties. |
 | beneficiaries | INTEGER | Tot_Benes. NULL when CMS suppressed it (fewer than 11 beneficiaries). |
@@ -270,7 +270,7 @@ Medicare Part D Prescribers by Provider and Drug, 2024. One row per prescriber x
 | ge65_suppression_flag | VARCHAR |  |
 | ge65_bene_suppression_flag | VARCHAR |  |
 | ge65_claims | INTEGER |  |
-| ge65_fills_30day | DOUBLE |  |
+| ge65_fills_30day | DECIMAL(18,1) |  |
 | ge65_drug_cost | DECIMAL(18,2) |  |
 | ge65_day_supply | BIGINT |  |
 | ge65_beneficiaries | INTEGER |  |
@@ -360,7 +360,7 @@ Part D drug catalog, one row per normalized brand name x normalized generic name
 | brand_generic | VARCHAR |  |
 | is_generic_strict_rule | BOOLEAN |  |
 | claims | HUGEINT |  |
-| fills_30day | DOUBLE |  |
+| fills_30day | DECIMAL(38,1) |  |
 | drug_cost | DECIMAL(38,2) |  |
 | prescribers | BIGINT |  |
 | generic_available | BOOLEAN |  |
@@ -391,7 +391,7 @@ Open Payments drug and biological product names mapped to Part D drugs, with mat
 | specialty | VARCHAR |  |
 | specialty_source | VARCHAR |  |
 | total_claims | HUGEINT |  |
-| total_fills_30day | DOUBLE |  |
+| total_fills_30day | DECIMAL(38,1) |  |
 | total_drug_cost | DECIMAL(38,2) |  |
 | drugs_prescribed | BIGINT |  |
 | drug_beneficiary_sum | HUGEINT |  |
@@ -428,7 +428,7 @@ Open Payments drug and biological product names mapped to Part D drugs, with mat
 | in_partd | BOOLEAN |  |
 | received_general_payment | BOOLEAN |  |
 | total_claims | HUGEINT |  |
-| total_fills_30day | DOUBLE |  |
+| total_fills_30day | DECIMAL(38,1) |  |
 | total_drug_cost | DECIMAL(38,2) |  |
 | brand_claims | HUGEINT |  |
 | drugs_prescribed | BIGINT |  |

@@ -91,7 +91,7 @@ def top_drugs(con, n=25):
                sum(f.drug_cost) / sum(sum(f.drug_cost)) over () as share_of_total_cost
         from marts.fact_prescriptions f join marts.dim_drug d using (drug_key)
         group by d.brand_name, d.generic_name, d.brand_generic
-        order by drug_cost desc
+        order by drug_cost desc, d.brand_name, d.generic_name
         limit {n}""")
 
 
@@ -113,7 +113,7 @@ def by_group(con, dim_sql, group_cols):
         join marts.dim_drug d using (drug_key)
         {dim_sql}
         group by all
-        order by drug_cost desc""")
+        order by drug_cost desc, 1""")
 
 
 def savings(con):
@@ -154,11 +154,11 @@ def savings(con):
             where b.brand_generic = 'Brand'
         )
         select *,
-               row_number() over (order by savings_upper_bound desc) as upper_bound_rank,
+               row_number() over (order by savings_upper_bound desc, drug_key) as upper_bound_rank,
                case when excluded_reason_category is null then savings_upper_bound else 0 end
                                                          as savings_reviewed
         from s
-        order by savings_upper_bound desc""")
+        order by savings_upper_bound desc, drug_key""")
     s["reviewed_by_hand"] = s["upper_bound_rank"] <= REVIEW_DEPTH
     return s
 
